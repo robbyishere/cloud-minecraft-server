@@ -26,11 +26,11 @@ app.post('/interactions', function (req, res) {
       startInstance();
 	  return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {content: '**Starting Minecraft Server** :sunglasses:\n*Please wait as this can take a few minutes*'},
+        data: {content: '**Starting Minecraft Server** :sunglasses:\n*Please wait as this can take a few minutes*', flags: 1<<6},
       });
     }
 	if (data.name === 'address') {
-		console.log(time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+" "+"/address")
+		console.log(time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+" "+"/address", flags: 1<<6)
 		return res.send({
 			type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
 			data: {content: process.env.SERVER_IP},
