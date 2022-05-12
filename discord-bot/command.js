@@ -1,6 +1,7 @@
 import express from 'express';
 import { InteractionType, InteractionResponseType } from 'discord-interactions';
 import { VerifyDiscordRequest, DiscordRequest } from './utils.js';
+import compute from '@google-cloud/compute';
 
 // Create and configure express app
 const app = express();
@@ -22,9 +23,10 @@ app.post('/interactions', function (req, res) {
   if (type === InteractionType.APPLICATION_COMMAND) {
     if (data.name === 'start') {
 	  console.log(time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+" "+"/start")
-      return res.send({
+      startInstance();
+	  return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {content: 'Starting Minecraft Server'},
+        data: {content: '**Starting Minecraft Server** :sunglasses:\n*Please wait as this can take a few minutes*'},
       });
     }
 	if (data.name === 'address') {
@@ -73,6 +75,32 @@ async function createCommand() {
   } catch (err) {
     console.error('Error installing commands: ', err);
   }
+}
+
+async function startInstance() {
+	const instancesClient = new compute.InstancesClient();
+	
+	const projectId = process.env.PROJECT_ID;
+    const zone = process.env.ZONE;
+    const instanceName = process.env.INSTANCE_NAME;
+	
+
+    const [response] = await instancesClient.start({
+      project: projectId,
+      zone,
+      instance: instanceName,
+    });
+    let operation = response.latestResponse;
+    const operationsClient = new compute.ZoneOperationsClient();
+
+    // Wait for the operation to complete.
+    while (operation.status !== 'DONE') {
+      [operation] = await operationsClient.wait({
+        operation: operation.name,
+        project: projectId,
+        zone: operation.zone.split('/').pop(),
+      });
+    }
 }
 
 app.listen(3000, () => {
