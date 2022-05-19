@@ -26,12 +26,12 @@ client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
 
 	if (interaction.commandName === 'start') {
-		console.log(time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+" "+"/start")
+		console.log(time.getFullYear()+"-"+(time.getMonth()+1)+"-"+time.getDate()+" "+time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+" "+interaction.user.username+" "+"/start");
 		startInstance();
 		await interaction.reply({content: 'Starting the Minecraft Server :sunglasses:' +'\n'+'*Please wait as this can take a few minutes*', ephemeral: true});
 	}
 	if (interaction.commandName === 'address') {
-		console.log(time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+" "+"/address")
+		console.log(time.getFullYear()+"-"+(time.getMonth()+1)+"-"+time.getDate()+" "+time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+" "+interaction.user.username+" "+"/address");
 		await interaction.reply({content: process.env.SERVER_IP, ephemeral: true});
 	}
 });
