@@ -1,21 +1,7 @@
-const compute= require('@google-cloud/compute');
 const dotenv = require('dotenv/config');
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
-
-async function startInstance() {
-	const projectId = process.env.PROJECT_ID;
-	const zoneName = process.env.ZONE;
-	const instanceName = process.env.INSTANCE_NAME;
-	
-	const instancesClient = new compute.InstancesClient();
-	
-    const [response] = await instancesClient.start({
-	  project: projectId,
-      zone: zoneName,
-      instance: instanceName,
-    });
-}
+const {exec} = require('child_process');
 
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
@@ -27,7 +13,7 @@ client.on('interactionCreate', async interaction => {
 
 	if (interaction.commandName === 'start') {
 		console.log(time.getFullYear()+"-"+(time.getMonth()+1)+"-"+time.getDate()+" "+time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+" "+interaction.user.username+" "+"/start");
-		startInstance();
+		exec('az vm start -g Minecraft-Server -n Minecraft-VM');
 		await interaction.reply({content: 'Starting the Minecraft Server :sunglasses:' +'\n'+'*Please wait as this can take a few minutes*', ephemeral: true});
 	}
 	if (interaction.commandName === 'address') {

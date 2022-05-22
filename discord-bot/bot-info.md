@@ -10,7 +10,4 @@ Requires environment variable `GOOGLE_APPLICATION_CREDENTIALS` to define path to
  - GUILD_ID (Discord Server ID)
  - DISCORD_TOKEN
  - SERVER_IP
- - PROJECT_ID (Google Cloud Project ID)
- - ZONE (Google Cloud VM Zone)
- - INSTANCE_NAME (Google Cloud VM Name)
 
