@@ -3,8 +3,25 @@ const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 const {exec} = require('child_process');
 
+function statusCheck(){
+//Changes Discord Bot's online status to reflect VM's status
+	exec("az vm list -d -g Minecraft-Server || grep Minecraft-Server  VM RUNNING",(err,stdout) => {
+		  if(!err){
+			if(stdout){
+				client.user.setStatus('online');
+			}
+			else{
+				client.user.setStatus('dnd');
+			}
+		  }
+	  });
+	setTimeout(statusCheck,60000);
+}
+	
+	  
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
+	statusCheck();
 });
 
 client.on('interactionCreate', async interaction => {
