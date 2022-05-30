@@ -14,8 +14,16 @@ function statusCheck(){
 				client.user.setStatus('online');
 				serverStatus=1;
 			}
-			else if(vmStatus=='VM stopped'){
+			else if(vmStatus=='VM stopped'||vmStatus=='VM deallocated'){
 				client.user.setStatus('dnd');
+				if(serverStatus==1){
+					exec("az vm deallocate -g Minecraft-Server -n Minecraft-VM", (err,stdout) => {
+						if(err){
+							console.log("ERROR "+err);
+							console.log("OUTPUT "+stdout);
+						}
+					});
+				}
 				serverStatus=0;
 			}
 			else{
@@ -65,8 +73,10 @@ client.on('interactionCreate', async interaction => {
 		else{
 			reply=alreadyStart;
 		}
+		//Notify me when server is started
+		const me=await client.users.fetch(process.env_DISCORD_USER_ID);
+		me.send('started');
 		await interaction.reply({content: reply, ephemeral: true});
-	}
 	}
 	if (interaction.commandName === 'address') {
 		console.log(time.getFullYear()+"-"+(time.getMonth()+1)+"-"+time.getDate()+" "+time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+" "+interaction.user.username+" "+"/address");

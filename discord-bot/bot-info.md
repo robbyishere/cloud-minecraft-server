@@ -10,4 +10,5 @@ Requires environment variable `GOOGLE_APPLICATION_CREDENTIALS` to define path to
  - GUILD_ID (Discord Server ID)
  - DISCORD_TOKEN
  - SERVER_IP
+ - DISCORD_USER_ID
 
