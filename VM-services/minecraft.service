@@ -1,0 +1,13 @@
+[Unit]
+Description=Manages Minecraft Server
+
+[Service]
+Type=simple
+ExecStart=/bin/sh -c "screen -D -m -S server bash -c 'cd /home/Minecraft_user/Fabric; java -Xms6G -Xmx6G -jar fabric-server-launch.jar nogui'"
+ExecStop=/bin/sh -c "screen -r server -X stuff '/stop\n' && sleep 10"
+TimeoutStopSec=10
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

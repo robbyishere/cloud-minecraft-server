@@ -1,0 +1,10 @@
+[Unit]
+Description=Runs Startup Script on Boot
+
+[Service]
+Type=oneshot
+ExecStartPre=/bin/sh -c ""
+ExecStart=/bin/sh -c "noip2"
+
+[Install]
+WantedBy=multi-user.target
