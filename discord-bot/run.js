@@ -26,6 +26,10 @@ function statusCheck(){
 				}
 				serverStatus=0;
 			}
+			else if(vmStatus=='VM deallocating'||vmStatus=='VM starting'){
+				client.user.setStatus('idle');
+				serverStatus=2;
+			}
 			else{
 				client.user.setStatus('invisible');
 				console.log("Other Power State: "+vmStatus);
@@ -70,17 +74,20 @@ client.on('interactionCreate', async interaction => {
 			});
 			reply=successStart;
 		}
+		else if(serverStatus==2){
+		  reply=tryAgain;
+	 	}
 		else{
 			reply=alreadyStart;
 		}
 		//Notify me when server is started
 		const me=await client.users.fetch(process.env_DISCORD_USER_ID);
-		me.send('started');
+		me.send('Started by ' + interaction.user.username);
 		await interaction.reply({content: reply, ephemeral: true});
 	}
 	if (interaction.commandName === 'address') {
 		console.log(time.getFullYear()+"-"+(time.getMonth()+1)+"-"+time.getDate()+" "+time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()+" "+interaction.user.username+" "+"/address");
-		await interaction.reply({content: process.env.SERVER_IP, ephemeral: true});
+		await interaction.reply({content: '`' + process.env.SERVER_IP + '`' + ' or ' + '`' + process.env.SERVER_IP2 + '`', ephemeral: true});
 	}
 });
 
